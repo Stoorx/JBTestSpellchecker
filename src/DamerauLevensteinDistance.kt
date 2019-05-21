@@ -1,16 +1,6 @@
-object LevensteinDistance {
+object DamerauLevensteinDistance {
 
     fun getDistance(s1: String, s2: String): Int = calculateFast(s1, s2)
-
-    private fun calculate(s1: String, s2: String, i: Int, j: Int): Int =
-        if (i == 0 && j == 0) 0
-        else if (j == 0) i
-        else if (i == 0) j
-        else minOf(
-            calculate(s1, s2, i, j - 1) + 1,
-            calculate(s1, s2, i - 1, j) + 1,
-            calculate(s1, s2, i - 1, j - 1) + cost(s1[i - 1], s2[j - 1])
-        )
 
     private fun calculateFast(s1: String, s2: String) =
         Array(s1.length + 1) {
@@ -29,6 +19,16 @@ object LevensteinDistance {
         if (i == 0 && j == 0) 0
         else if (j == 0) i
         else if (i == 0) j
+        else if (i > 1 && j > 1) minOf(
+            minOf(
+                arr[i][j - 1] + 1,
+                arr[i - 1][j] + 1
+            ),
+            minOf(
+                arr[i - 1][j - 1] + cost(s1[i - 1], s2[j - 1]),
+                arr[i - 2][j - 2] + 1
+            )
+        )
         else minOf(
             arr[i][j - 1] + 1,
             arr[i - 1][j] + 1,

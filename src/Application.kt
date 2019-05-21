@@ -16,7 +16,7 @@ tailrec fun work(dictionary: Set<String>): Unit =
                 else dictionary.map { eWord ->
                     Pair(
                         eWord,
-                        LevensteinDistance.getDistance(it, eWord)
+                        DamerauLevensteinDistance.getDistance(it, eWord)
                     )
                 }.sortedBy { pair -> pair.second }.let { candidates ->
                     candidates.takeWhile { pair ->
