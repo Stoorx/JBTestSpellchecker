@@ -13,17 +13,24 @@ tailrec fun work(dictionary: Set<String>): Unit =
     if (print("> ").let {
             readLine()?.let {
                 if (dictionary.contains(it)) println("\'$it\' is correct word")
-                else dictionary.map { eWord ->
-                    Pair(
-                        eWord,
-                        DamerauLevensteinDistance.getDistance(it, eWord)
-                    )
-                }.sortedBy { pair -> pair.second }.let { candidates ->
-                    candidates.takeWhile { pair ->
-                        pair.second == candidates.first().second
+                else dictionary
+                    .map { eWord ->
+                        Pair(
+                            eWord,
+                            DamerauLevensteinDistance.getDistance(it, eWord)
+                        )
+                    }.sortedBy { pair ->
+                        pair.second
+                    }.let { candidates ->
+                        candidates.takeWhile { pair ->
+                            pair.second == candidates.first().second
+                        }
+                    }.also { pair ->
+                        println("Did you mean one of these words? Distance: ${pair.first().second}")
+                    }.forEach { word ->
+                        print("${word.first} ")
+                    }.also {
+                        println()
                     }
-                }.also { println("Did you mean one of these words? Distance: ${it.first().second}") }.forEach { word ->
-                    print("${word.first} ")
-                }.also { println() }
             }
         } != null) work(dictionary) else Unit
